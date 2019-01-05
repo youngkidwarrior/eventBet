@@ -7,13 +7,24 @@ const ipfsAPI = require('ipfs-api');
 const graphqlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
 
+
+const events = [];
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
 '/graphql',
   graphqlHttp({
     schema: buildSchema(`
-      type Event {
+    
+    input EventInput {
+      title: String! 
+      description: String!
+      price: Float!
+      date: String!
+    }
+      
+    type Event {
         _id: ID!
         title: String!
         description: String!
@@ -21,17 +32,12 @@ app.use(
         date: String!
       }
 
-      input EventInput {
-        title: String
-        description: String
-        price: Float
-        date: String
-      }
-
       type rootQuery {
         events: [Event!]!
+      }
+      
       type rootMutation {
-        createEvent(eventInput : EventInput): Event 
+        createEvent(eventInput: EventInput!): Event 
       }
 
       schema {
@@ -41,11 +47,19 @@ app.use(
     `),
     rootValue: {
       events: () => {
-        return ['Romantic Cooking','Sailing', 'All-Night Coding'];
+        return events;
       },
       createEvent: (args) => {
-        const eventName = args.name;
-        return eventName;
+        const event = {
+          _id: Math.random().toString(),
+          title: args.eventInput.title,
+          description: args.eventInput.description,
+          price: +args.eventInput.price,
+          date: args.eventInput.date
+        }
+        events.push(event);
+        console.log(args)
+        return event;
       }
     },
     graphiql: true
