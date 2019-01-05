@@ -1,60 +1,152 @@
-import React, { Component } from 'react'
-import { AccountData, ContractData, ContractForm } from 'drizzle-react-components'
-import logo from '../../logo.png'
+import React, { Component } from 'react';
+import {
+  AccountData,
+  ContractData,
+  ContractForm
+} from 'drizzle-react-components';
+import './Home.css';
+import ipfs from '../../../backend/ipfs';
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ipfsHash: '',
+      ethAddress: '',
+      loading: false,
+      User: {
+        username: '',
+        title: '',
+        description: '',
+        address: ''
+      }
+    };
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.setState(
+      {
+        // ethAddress: this.props.UserHash,
+        loading: true,
+        User: {
+          username: this.username.value,
+          title: this.title.value,
+          description: this.description.value,
+          address: this.props.accounts[0]
+        }
+      },
+      () => {
+        console.log(Buffer.from(JSON.stringify(this.state.User)))
+        this.add(Buffer.from(JSON.stringify(this.state.User)))
+      }
+    );
+  }
+
+  add(buffer) {
+    ipfs.add(buffer).then(result => {
+      this.setState({ ipfsHash: result[0].hash, loading: false }, () =>
+        ipfs.get(this.state.ipfsHash)
+        // this.publish(this.state.ipfsHash)
+      );
+    });
+  }
+
+  publish(hash) {
+    console.log(JSON.stringify(hash))
+    ipfs.name.publish(hash).then(res => {
+      console.log(res.text());
+    });
+  }
+
+  createUser() {
+    // var title = $('#sign - up - title').val();
+    // var intro = $('#sign - up - intro').val();
+    // // var ipfsHash = '';
+    // var ipfsHash = 'not-available';
+    // console.log('creating user on eth for', username, title, intro, ipfsHash);
+    // User.deployed().then(function (contractInstance) {
+    //   contractInstance.createUser(username, ipfsHash, { gas: 200000, from: web3.eth.accounts[0] }).then(function (success) {
+    //     if (success) {
+    //       console.log('created user on ethereum!');
+    //     } else {
+    //       console.log('error creating user on ethereum');
+    //     }
+    //   }).catch(function (e) {
+    //     // There was an error! Handle it.
+    //     console.log('error creating user: ', username, ': ', e);
+    //   });
+    // });
+  }
   render() {
     return (
-      <main className="container">
-        <div className="pure-g">
-          <div className="pure-u-1-1 header">
-            <img src={logo} alt="drizzle-logo" />
-            <h1>Drizzle Examples</h1>
-            <p>Examples of how to get started with Drizzle in various situations.</p>
+      <div>
+        <nav>
+          <div className="nav-list">
+            <a href="/">Profiles</a>
 
-            <br/><br/>
+            <ul>
+              <li>
+                <a href="/"> Home></a>
+              </li>
+            </ul>
           </div>
+        </nav>
 
-          <div className="pure-u-1-1">
-            <h2>Active Account</h2>
-            <AccountData accountIndex="0" units="ether" precision="3" />
+        <div className="container">
+          {!this.state.loading ? (
+            <form>
+              <h5> Create your Profile</h5>
+              <div>
+                <label htmlFor="username">Username</label>
+                <input
+                  type="text"
+                  className="signup-username"
+                  ref={el => (this.username = el)}
+                />
+              </div>
+              <br />
 
-            <br/><br/>
-          </div>
-
-          <div className="pure-u-1-1">
-            <h2>SimpleStorage</h2>
-            <p>This shows a simple ContractData component with no arguments, along with a form to set its value.</p>
-            <p><strong>Stored Value</strong>: <ContractData contract="SimpleStorage" method="storedData" /></p>
-            <ContractForm contract="SimpleStorage" method="set" />
-
-            <br/><br/>
-          </div>
-
-          <div className="pure-u-1-1">
-            <h2>TutorialToken</h2>
-            <p>Here we have a form with custom, friendly labels. Also note the token symbol will not display a loading indicator. We've suppressed it with the <code>hideIndicator</code> prop because we know this variable is constant.</p>
-            <p><strong>Total Supply</strong>: <ContractData contract="TutorialToken" method="totalSupply" methodArgs={[{from: this.props.accounts[0]}]} /> <ContractData contract="TutorialToken" method="symbol" hideIndicator /></p>
-            <p><strong>My Balance</strong>: <ContractData contract="TutorialToken" method="balanceOf" methodArgs={[this.props.accounts[0]]} /></p>
-            <h3>Send Tokens</h3>
-            <ContractForm contract="TutorialToken" method="transfer" labels={['To Address', 'Amount to Send']} />
-
-            <br/><br/>
-          </div>
-
-          <div className="pure-u-1-1">
-            <h2>ComplexStorage</h2>
-            <p>Finally this contract shows data types with additional considerations. Note in the code the strings below are converted from bytes to UTF-8 strings and the device data struct is iterated as a list.</p>
-            <p><strong>String 1</strong>: <ContractData contract="ComplexStorage" method="string1" toUtf8 /></p>
-            <p><strong>String 2</strong>: <ContractData contract="ComplexStorage" method="string2" toUtf8 /></p>
-            <strong>Single Device Data</strong>: <ContractData contract="ComplexStorage" method="singleDD" />
-
-            <br/><br/>
-          </div>
+              <div>
+                <label htmlFor="username">Title</label>
+                <input
+                  type="text"
+                  className="signup-title"
+                  ref={el => (this.title = el)}
+                />
+              </div>
+              <br />
+              <div>
+                <label htmlFor="username">Short description</label>
+                <textarea
+                  rows="2"
+                  className="signup-description"
+                  ref={el => (this.description = el)}
+                />
+              </div>
+              <br />
+              <div>
+                ETH Address:
+                <span className="eth-address" />
+                <AccountData accountIndex="0" units="ether" precision="3" />
+              </div>
+              <button
+                type="submit"
+                className="signup-submit"
+                onClick={this.handleSubmit.bind(this)}
+              >
+                Sign Up
+              </button>
+            </form>
+          ) : (
+            <div>loading</div>
+          )}
+          <ContractForm contract="UserHash" method="setHash" />
         </div>
-      </main>
-    )
+        <div className="users" />
+      </div>
+    );
   }
 }
 
-export default Home
+export default Home;
