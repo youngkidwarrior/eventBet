@@ -4,10 +4,57 @@ const bodyParser = require('body-parser');
 const app = express();
 const fs = require('fs');
 const ipfsAPI = require('ipfs-api');
+const graphqlHttp = require('express-graphql');
+const { buildSchema } = require('graphql');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+'/graphql',
+  graphqlHttp({
+    schema: buildSchema(`
+      type Event {
+        _id: ID!
+        title: String!
+        description: String!
+        price: Float!
+        date: String!
+      }
 
+      input EventInput {
+        title: String
+        description: String
+        price: Float
+        date: String
+      }
+
+      type rootQuery {
+        events: [Event!]!
+      type rootMutation {
+        createEvent(eventInput : EventInput): Event 
+      }
+
+      schema {
+        query: rootQuery
+        mutation: rootMutation
+      }
+    `),
+    rootValue: {
+      events: () => {
+        return ['Romantic Cooking','Sailing', 'All-Night Coding'];
+      },
+      createEvent: (args) => {
+        const eventName = args.name;
+        return eventName;
+      }
+    },
+    graphiql: true
+  })
+);
+
+/////////////////////////////
+///  CORS Gateway         ///
+/////////////////////////////
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');
@@ -51,12 +98,10 @@ app.get('/getfile', function(req, res) {
     });
   });
 });
+
 app.get('/publish', function(req, res) {
-  ipfs.name.publish(
-    'QmZnQMfkSa3tpZJ78NMak4LeZ17B6S8DHkPJYU478mrBPQ',
-    (res) => {
-      console.log(res);
-    }
-  );
+  ipfs.name.publish('QmZnQMfkSa3tpZJ78NMak4LeZ17B6S8DHkPJYU478mrBPQ', res => {
+    console.log(res);
+  });
 });
 module.exports = app;
