@@ -6,14 +6,16 @@ const fs = require('fs');
 const ipfsAPI = require('ipfs-api');
 const graphqlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
+const mongoose = require('mongoose');
 
+const Event = require('./models/event');
 
 const events = [];
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
-'/graphql',
+  '/graphql',
   graphqlHttp({
     schema: buildSchema(`
     
@@ -47,24 +49,59 @@ app.use(
     `),
     rootValue: {
       events: () => {
-        return events;
+        //static methods methods allowed to be called without changing data
+        //Model.find() return specified model
+        return Event.find()
+          .then(events => {
+            return events.map(event => {
+              return { ...event._doc, _id: event.id};
+            });
+          })
+          .catch(err => {
+            throw err;
+          });
       },
-      createEvent: (args) => {
-        const event = {
-          _id: Math.random().toString(),
+      createEvent: args => {
+        //Using mongoose model here allowing storage into
+        //database with Model.save()
+        const event = new Event({
           title: args.eventInput.title,
           description: args.eventInput.description,
           price: +args.eventInput.price,
-          date: args.eventInput.date
-        }
-        events.push(event);
-        console.log(args)
-        return event;
+          date: new Date(args.eventInput.date)
+        });
+        return event
+          .save()
+          .then(result => {
+            console.log(result);
+            return { ...result._doc, _id: event.id };
+          })
+          .catch(err => {
+            console.log(err);
+            throw err;
+          });
       }
     },
     graphiql: true
   })
 );
+
+///////////////////////////////
+/// Mongo Cluster Connect ///
+///////////////////////////////
+
+mongoose
+  .connect(
+    `mongodb+srv://${process.env.MONGO_USER}:${
+      process.env.MONGO_PASSWORD
+    }@cluster0-dgued.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`
+  )
+  .then(() => {
+    console.log('Connected to DB');
+  })
+  .catch(() => {
+    console.log('Connection Failed');
+  });
 
 /////////////////////////////
 ///  CORS Gateway         ///

@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER":"YKW",
+        "MONGO_PASSWORD":"AcSo87Ls0urW13hP",
+        "MONGO_DB": "eventBet-react-dev"
+    }
+}
