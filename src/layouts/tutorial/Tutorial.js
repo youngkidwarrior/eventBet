@@ -4,6 +4,7 @@ import { Link, Route, Switch, Redirect } from 'react-router-dom';
 import AuthContainer from './auth/AuthContainer';
 import BookingsContainer from './bookings/BookingsContainer';
 import EventsContainer from './events/EventsContainer';
+import MainNavigation from '../../components/navigation/MainNavigation';
 
 class Tutorial extends Component {
   constructor(props) {
@@ -26,47 +27,30 @@ class Tutorial extends Component {
     });
   }
   displayNav() {
-    return (
-      <nav>
-        <div>
-          <Link to="/">Home</Link>
-          <ul>
-            <li>
-              <Link to="/tutorial/auth">Auth</Link>
-            </li>
-            <li>
-              <Link to="/tutorial/events">Events</Link>
-            </li>
-            <li>
-              <Link to="/tutorial/bookings">Bookings</Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    );
+    return <MainNavigation />;
   }
 
   render() {
-      console.log(this.state.auth)
+    console.log(this.state.auth);
     return (
       <div>
-        {this.state.auth
-          ? this.displayNav()
-          : <Redirect to='/tutorial/auth'/>}
-        <Switch>
-          <Route
-            path="/tutorial/auth"
-            render={props => (
-              <AuthContainer
-                {...props}
-                unAuth={this.unAuthorize}
-                submitAuth={this.submitAuth}
-              />
-            )}
-          />
-          <Route path="/tutorial/bookings" component={BookingsContainer} />
-          <Route path="/tutorial/events" component={EventsContainer} />
-        </Switch>
+        {this.state.auth ? this.displayNav() : <Redirect to="/tutorial/auth" />}
+        <div className="main-content">
+          <Switch>
+            <Route
+              path="/tutorial/auth"
+              render={props => (
+                <AuthContainer
+                  {...props}
+                  unAuth={this.unAuthorize}
+                  submitAuth={this.submitAuth}
+                />
+              )}
+            />
+            <Route path="/tutorial/bookings" component={BookingsContainer} />
+            <Route path="/tutorial/events" component={EventsContainer} />
+          </Switch>
+        </div>
       </div>
     );
   }
