@@ -5,7 +5,7 @@ import {
   ContractForm
 } from 'drizzle-react-components';
 import './Home.css';
-import ipfs from '../../../backend/ipfs';
+import { Link } from 'react-router-dom';
 
 class Home extends Component {
   constructor(props) {
@@ -25,69 +25,66 @@ class Home extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState(
-      {
-        // ethAddress: this.props.UserHash,
-        loading: true,
-        User: {
-          username: this.username.value,
-          title: this.title.value,
-          description: this.description.value,
-          address: this.props.accounts[0]
-        }
-      },
-      () => {
-        console.log(Buffer.from(JSON.stringify(this.state.User)))
-        this.add(Buffer.from(JSON.stringify(this.state.User)))
+    this.setState({
+      // ethAddress: this.props.UserHash,
+      loading: true,
+      User: {
+        username: this.username.value,
+        title: this.title.value,
+        description: this.description.value,
+        address: this.props.accounts[0]
       }
-    );
-  }
-
-  add(buffer) {
-    ipfs.add(buffer).then(result => {
-      this.setState({ ipfsHash: result[0].hash, loading: false }, () =>
-        ipfs.get(this.state.ipfsHash)
-        // this.publish(this.state.ipfsHash)
-      );
     });
   }
 
-  publish(hash) {
-    console.log(JSON.stringify(hash))
-    ipfs.name.publish(hash).then(res => {
-      console.log(res.text());
-    });
-  }
+  // add(buffer) {
+  //   ipfs.add(buffer).then(result => {
+  //     this.setState({ ipfsHash: result[0].hash, loading: false }, () =>
+  //       ipfs.get(this.state.ipfsHash)
+  //       // this.publish(this.state.ipfsHash)
+  //     );
+  //   });
+  // }
 
-  createUser() {
-    // var title = $('#sign - up - title').val();
-    // var intro = $('#sign - up - intro').val();
-    // // var ipfsHash = '';
-    // var ipfsHash = 'not-available';
-    // console.log('creating user on eth for', username, title, intro, ipfsHash);
-    // User.deployed().then(function (contractInstance) {
-    //   contractInstance.createUser(username, ipfsHash, { gas: 200000, from: web3.eth.accounts[0] }).then(function (success) {
-    //     if (success) {
-    //       console.log('created user on ethereum!');
-    //     } else {
-    //       console.log('error creating user on ethereum');
-    //     }
-    //   }).catch(function (e) {
-    //     // There was an error! Handle it.
-    //     console.log('error creating user: ', username, ': ', e);
-    //   });
-    // });
-  }
+  // publish(hash) {
+  //   console.log(JSON.stringify(hash))
+  //   ipfs.name.publish(hash).then(res => {
+  //     console.log(res.text());
+  //   });
+  // }
+
+  // createUser() {
+  //   var title = $('#sign - up - title').val();
+  //   var intro = $('#sign - up - intro').val();
+  //   // var ipfsHash = '';
+  //   var ipfsHash = 'not-available';
+  //   console.log('creating user on eth for', username, title, intro, ipfsHash);
+  //   User.deployed().then(function (contractInstance) {
+  //     contractInstance.createUser(username, ipfsHash, { gas: 200000, from: web3.eth.accounts[0] }).then(function (success) {
+  //       if (success) {
+  //         console.log('created user on ethereum!');
+  //       } else {
+  //         console.log('error creating user on ethereum');
+  //       }
+  //     }).catch(function (e) {
+  //       // There was an error! Handle it.
+  //       console.log('error creating user: ', username, ': ', e);
+  //     });
+  //   });
+  // }
   render() {
     return (
       <div>
         <nav>
           <div className="nav-list">
-            <a href="/">Profiles</a>
+            <Link to="/">Profiles</Link>
 
             <ul>
               <li>
-                <a href="/"> Home></a>
+                <Link to="/">Home></Link>
+              </li>
+              <li>
+                <Link to="/tutorial">Tutorial</Link>
               </li>
             </ul>
           </div>
