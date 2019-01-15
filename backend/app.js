@@ -8,8 +8,20 @@ const graphqlResolvers = require('./graphql/resolvers/index');
 const isAuth = require('./middleware/is-auth');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
+/////////////////////////////
+///  CORS Headers         ///
+/////////////////////////////
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 app.use(isAuth);
 
@@ -39,21 +51,6 @@ mongoose
     console.log('Connection Failed');
   });
 
-/////////////////////////////
-///  CORS Gateway         ///
-/////////////////////////////
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PATCH, PUT, DELETE, OPTIONS'
-  );
-  next();
-});
+
 
 module.exports = app;

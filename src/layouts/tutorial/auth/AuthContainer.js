@@ -7,7 +7,6 @@ const mapStateToProps = (state, props) => {
     accounts: state.accounts,
     drizzleStatus: state.drizzleStatus,
     submitAuth: props.submitAuth,
-    unAuth: props.unAuth
   }
 }
 

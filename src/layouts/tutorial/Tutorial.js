@@ -12,29 +12,19 @@ class Tutorial extends Component {
     this.state = {
       auth: false
     };
-    this.submitAuth = this.submitAuth.bind(this);
-    this.unAuthorize = this.unAuthorize.bind(this);
   }
 
-  submitAuth() {
+  submitAuth = () => {
     this.setState({
       auth: true
     });
   }
-  unAuthorize() {
-    this.setState({
-      auth: false
-    });
-  }
-  displayNav() {
-    return <MainNavigation />;
-  }
 
   render() {
-    console.log(this.state.auth);
     return (
       <div>
-        {this.state.auth ? this.displayNav() : <Redirect to="/tutorial/auth" />}
+        <MainNavigation auth={this.state.auth}/>
+        {this.state.auth ? null : <Redirect to="/tutorial/auth" />}
         <div className="main-content">
           <Switch>
             <Route
@@ -42,7 +32,6 @@ class Tutorial extends Component {
               render={props => (
                 <AuthContainer
                   {...props}
-                  unAuth={this.unAuthorize}
                   submitAuth={this.submitAuth}
                 />
               )}

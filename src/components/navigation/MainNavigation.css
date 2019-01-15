@@ -13,6 +13,11 @@
 .main-navigation__logo h1 {
     margin: 0;
     font-size: 1.5rem;
+    color: #000
+}
+.main-navigation__logo a {
+    text-decoration: none;
+    
 }
 
 .main-navigation__items {
@@ -38,5 +43,5 @@
 .main-navigation__items a:hover,
 .main-navigation__items a:active,
 .main-navigation__items a.active {
-    color: rgb(255, 230, 0);
+    color: rgb(255, 245, 157);
 }
