@@ -11,7 +11,6 @@ class Events extends Component {
   render() {
     return (
       <div>
-        <Link to="/tutorial">Tutorial</Link>
         <h1> The Events Page</h1>
       </div>
     );

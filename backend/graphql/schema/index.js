@@ -7,6 +7,8 @@ const { buildSchema } = require('graphql');
 ///        for the query because password should never be returned      ///
 ///     - Layout                                                        ///
 ///         User -> one to many -> Events                               ///
+///         Events -> one to many -> Booking                            ///
+///         User -> one to many -> Booking                              ///
 ///////////////////////////////////////////////////////////////////////////
 module.exports = buildSchema(`
         input EventInput {
@@ -18,7 +20,7 @@ module.exports = buildSchema(`
 
         input UserInput {
             email: String!
-            password: String!
+            address: String!
         }
 
         type Booking {
@@ -40,12 +42,14 @@ module.exports = buildSchema(`
         type User {
             _id: ID!
             email: String!
-            password: String
+            address: String!
+            nonce: String!
             createdEvents: [Event!]
         }
 
         type AuthData {
             userId: ID!
+            nonce: String!
             token: String!
             tokenExpiration: Int!
         }
@@ -53,7 +57,8 @@ module.exports = buildSchema(`
         type rootQuery {
             events: [Event!]!
             bookings: [Booking!]!
-            login(email: String!, password: String!): AuthData
+            login(email: String!, address: String!): User
+            verify(address: String!, signature: String!): AuthData
         }
 
         type rootMutation {

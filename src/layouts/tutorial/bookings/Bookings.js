@@ -11,7 +11,6 @@ class Bookings extends Component {
   render() {
     return (
       <div>
-        <Link to="/tutorial">Tutorial</Link>
         <h1>The Bookings Page</h1>
       </div>
     );
