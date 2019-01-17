@@ -5,7 +5,7 @@ import authReducer from './authReducer';
 
 const rootReducer = combineReducers({
   routing: routerReducer,
-  auth: authReducer,
+  authorize: authReducer,
   ...drizzleReducers
 })
 

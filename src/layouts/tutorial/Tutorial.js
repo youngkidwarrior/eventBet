@@ -16,15 +16,6 @@ class Tutorial extends Component {
     };
   }
 
-  //probably don't need these with redux
-  login = (token, userId, tokenExpiration) => {
-    this.setState({ userId: userId, token: token });
-  };
-
-  logout = () => {
-    this.setState({ userId: null, token: null });
-  };
-
   render() {
     return (
       <div>

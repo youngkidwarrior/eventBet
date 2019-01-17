@@ -45,7 +45,7 @@ module.exports = {
     }
   },
   //object destructuring arguments
-  login: async ({ email, address }) => {
+  login: async ({ address }) => {
     const user = await User.findOne({ address: address });
     if (!user) {
       throw new Error('User does not exist');
@@ -66,6 +66,7 @@ module.exports = {
       }
       const nonce = await bcrypt.hash(args.userInput.address, 12);
       const user = new User({
+        username: args.userInput.username,
         email: args.userInput.email,
         address: args.userInput.address,
         nonce: nonce
@@ -73,6 +74,7 @@ module.exports = {
       const result = await user.save();
       return {
         ...result._doc,
+        username: result._doc.username,
         address: result._doc.address,
         nonce: result._doc.nonce,
         _id: result.id

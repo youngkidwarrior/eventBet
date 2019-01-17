@@ -27,6 +27,12 @@ const mainNavigation = props => (
         )}
       </ul>
     </nav>
+    {props.token && (
+        <div className="user-info">
+          <h3 className="username-header">{props.username}</h3>
+          <h3 className="email-header">{props.email}</h3>
+        </div>
+      )}
   </header>
 );
 
@@ -34,9 +40,11 @@ const mapStateToProps = (state, props) => {
   return {
     accounts: state.accounts,
     drizzleStatus: state.drizzleStatus,
-    token: state.auth.token,
-    userId: state.auth.userId,
-    tokenExpiration: state.auth.tokenExpiration
+    token: state.authorize.token,
+    userId: state.authorize.userId,
+    tokenExpiration: state.authorize.tokenExpiration,
+    username: state.authorize.username,
+    email: state.authorize.email
   };
 };
 

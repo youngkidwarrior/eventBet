@@ -45,3 +45,13 @@
 .main-navigation__items a.active {
     color: rgb(255, 245, 157);
 }
+
+.user-info {
+    padding: 1.5rem;
+    display: flex;
+    margin-left: auto
+}
+
+.user-info h3{
+    margin: 0 1rem;
+}

@@ -17,8 +17,7 @@ const routingMiddleware = routerMiddleware(history)
 const sagaMiddleware = createSagaMiddleware()
 
 const initialState = {
-  contracts: generateContractsInitialState(drizzleOptions),
-  auth2: true
+  contracts: generateContractsInitialState(drizzleOptions)
 }
 
 const store = createStore(

@@ -19,6 +19,7 @@ module.exports = buildSchema(`
         }
 
         input UserInput {
+            username: String!
             email: String!
             address: String!
         }
@@ -41,6 +42,7 @@ module.exports = buildSchema(`
 
         type User {
             _id: ID!
+            username: String!
             email: String!
             address: String!
             nonce: String!
@@ -57,7 +59,7 @@ module.exports = buildSchema(`
         type rootQuery {
             events: [Event!]!
             bookings: [Booking!]!
-            login(email: String!, address: String!): User
+            login(address: String!): User
             verify(address: String!, signature: String!): AuthData
         }
 

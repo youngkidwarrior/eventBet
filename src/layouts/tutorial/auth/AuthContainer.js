@@ -1,21 +1,21 @@
 import Auth from './Auth';
 import PropTypes from 'prop-types';
 import { drizzleConnect } from 'drizzle-react';
-import { authorize } from '../../../actions/auth';
+import { authorize } from '../../../actions/tokenAuth';
+import { userInfo } from '../../../actions/userInfo';
 
 const mapStateToProps = (state, props) => {
   return {
     accounts: state.accounts,
-    drizzleStatus: state.drizzleStatus,
+    drizzleStatus: state.drizzleStatus
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    authorize: (userId, token, tokenExpiration) =>
-      dispatch(authorize(userId, token, tokenExpiration))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  authorize: (userId, token, tokenExpiration) =>
+    dispatch(authorize(userId, token, tokenExpiration)),
+  userInfo: (username, email) => dispatch(userInfo(username, email))
+});
 
 Auth.contextTypes = {
   drizzle: PropTypes.object

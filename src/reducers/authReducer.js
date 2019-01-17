@@ -1,5 +1,11 @@
 const authReducer = (
-  state = { userId: null, token: null, tokenExpiration: null },
+  state = {
+    userId: null,
+    token: null,
+    tokenExpiration: null,
+    username: null,
+    email: null
+  },
   action
 ) => {
   switch (action.type) {
@@ -23,6 +29,26 @@ const authReducer = (
         loading: false,
         error: action.payload.err
       };
+    case 'USER_INFO_BEGIN':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case 'USER_INFO_SUCCESS':
+      return {
+        ...state,
+        username: action.payload.username,
+        email: action.payload.email,
+        loading: false
+      };
+    case 'USER_INFO_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.err
+      };
+
     default:
       return state;
   }
