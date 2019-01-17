@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Tutorial.css';
-import { Link, Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import AuthContainer from './auth/AuthContainer';
 import BookingsContainer from './bookings/BookingsContainer';
 import EventsContainer from './events/EventsContainer';
@@ -10,34 +10,43 @@ class Tutorial extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      auth: false
+      token: props.token,
+      userId: props.userId,
+      tokenExpiration: props.tokenExpiration
     };
   }
 
-  submitAuth = () => {
-    this.setState({
-      auth: true
-    });
-  }
+  //probably don't need these with redux
+  login = (token, userId, tokenExpiration) => {
+    this.setState({ userId: userId, token: token });
+  };
+
+  logout = () => {
+    this.setState({ userId: null, token: null });
+  };
 
   render() {
     return (
       <div>
-        <MainNavigation auth={this.state.auth}/>
-        {this.state.auth ? null : <Redirect to="/tutorial/auth" />}
+        <MainNavigation />
         <div className="main-content">
           <Switch>
-            <Route
-              path="/tutorial/auth"
-              render={props => (
-                <AuthContainer
-                  {...props}
-                  submitAuth={this.submitAuth}
-                />
-              )}
-            />
-            <Route path="/tutorial/bookings" component={BookingsContainer} />
+            {!this.props.token && (
+              <Redirect from="/tutorial" to="/tutorial/auth" exact />
+            )}
+            {this.props.token && (
+              <Redirect from="/tutorial" to="/tutorial/events" exact />
+            )}
+            {this.props.token && (
+              <Redirect from="/tutorial/auth" to="/tutorial/events" exact />
+            )}
+            {!this.props.token && (
+              <Route path="/tutorial/auth" component={AuthContainer} />
+            )}
             <Route path="/tutorial/events" component={EventsContainer} />
+            {this.props.token && (
+              <Route path="/tutorial/bookings" component={BookingsContainer} />
+            )}
           </Switch>
         </div>
       </div>

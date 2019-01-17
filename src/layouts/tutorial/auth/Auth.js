@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import './Auth.css';
-import { Link, Redirect } from 'react-router-dom';
 
 class Auth extends Component {
   constructor(props, context) {
     super(props);
+    this.web3 = context.drizzle.web3;
     this.emailEl = React.createRef();
+    
+
     this.state = {
-      auth: false,
-      goHome: false
+      auth: false
     };
   }
+
+  // handleLogin() {
+  //   this.props.login()
+  // }
 
   //////////////////////////////////////////////////////////////////////////////
   //THIS FLOW IS WEIRD. NEEDS TO BE SEPERATED INTO FUNCTIONS AND REDUX ACTIONS//
   //////////////////////////////////////////////////////////////////////////////
   //First request body is sent depending on auth state
-  //if logging in, user sends email and address to server, server then 
+  //if logging in, user sends email and address to server, server then
   //returns user object. The users then signs with its nonce and uses the signature
   //in the verify query
   handleSubmitAuth = e => {
@@ -78,12 +83,6 @@ class Auth extends Component {
       .catch(err => {
         console.log(err);
       });
-
-    this.props.submitAuth();
-    // this.setState({
-    //   auth: true,
-    //   goHome: true
-    // });
   };
 
   handleVerify = (address, signature) => {
@@ -91,8 +90,9 @@ class Auth extends Component {
       query: `
         query {
           verify(address: "${address}", signature: "${signature}") {
+            userId
             token
-            nonce
+            tokenExpiration
           }
         }
       `
@@ -103,14 +103,21 @@ class Auth extends Component {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(res => console.log(res.json()));
+    })
+      .then(res => res.json())
+      .then(resData => {
+        this.props.authorize(
+          resData.data.verify.userId,
+          resData.data.verify.token,
+          resData.data.verify.tokenExpiration
+        );
+      });
   };
 
   handleSignMessage = (address, nonce) => {
-    const web3 = this.context.drizzle.web3;
     return new Promise((resolve, reject) => {
-      web3.eth.personal.sign(
-        web3.utils.fromUtf8(`I am signing my one-time nonce: ${nonce}`),
+      this.web3.eth.personal.sign(
+        this.web3.utils.fromUtf8(`I am signing my one-time nonce: ${nonce}`),
         address,
         (err, signature) => {
           if (err) return reject(err);
@@ -130,7 +137,6 @@ class Auth extends Component {
   render() {
     return (
       <div>
-        {this.state.goHome ? <Redirect to="/tutorial" /> : null}
         <h1> The Auth Page</h1>
         <form className="auth-form" onSubmit={this.handleSubmitAuth}>
           <div className="form-control">

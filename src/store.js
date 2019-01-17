@@ -2,7 +2,7 @@ import createHistory from 'history/createBrowserHistory'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
-import reducer from './reducer'
+import rootReducer from './reducers/rootReducer'
 import rootSaga from './rootSaga'
 import createSagaMiddleware from 'redux-saga'
 import { generateContractsInitialState } from 'drizzle'
@@ -17,11 +17,12 @@ const routingMiddleware = routerMiddleware(history)
 const sagaMiddleware = createSagaMiddleware()
 
 const initialState = {
-  contracts: generateContractsInitialState(drizzleOptions)
+  contracts: generateContractsInitialState(drizzleOptions),
+  auth2: true
 }
 
 const store = createStore(
-  reducer,
+  rootReducer,
   initialState,
   composeEnhancers(
     applyMiddleware(
