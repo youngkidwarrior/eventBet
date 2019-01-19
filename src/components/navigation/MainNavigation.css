@@ -1,57 +1,88 @@
 .main-navigation {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 3.5rem;
-    background: #01d1d1;
-    padding: 0 1rem;
-    display: flex;
-    align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3.5rem;
+  background: #2d7a9c;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-navigation::selection {
+  background-color: Transparent;
+  color: #000;
 }
 
 .main-navigation__logo h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #000
+  margin: 0;
+  font-size: 1.5rem;
+  color: rgba(247, 222, 111, 0.979);
 }
 .main-navigation__logo a {
-    text-decoration: none;
-    
+  text-decoration: none;
 }
 
 .main-navigation__items {
-    margin-left: 1.5rem;
+  margin-left: 1.5rem;
 }
 
 .main-navigation__items ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .main-navigation__items li {
-    margin: 0 1rem;
+  margin: 0 1rem;
 }
 
 .main-navigation__items a {
-    text-decoration: none;
-    color: #000;
+  text-decoration: none;
+  color: #000;
 }
 
 .main-navigation__items a:hover,
 .main-navigation__items a:active,
 .main-navigation__items a.active {
-    color: rgb(255, 245, 157);
+  color: rgb(255, 245, 157);
 }
 
 .user-info {
-    padding: 1.5rem;
-    display: flex;
-    margin-left: auto
+  padding: 1.5rem;
+  display: flex;
+  margin-left: auto;
 }
 
-.user-info h3{
-    margin: 0 1rem;
+.user-info h3 {
+  margin: 0 1rem;
+}
+
+.hide-menu {
+    top:-50px !important;
+    
+}
+
+.bm-burger-button {
+  position: fixed;
+  width: 50px;
+  height: 30px;
+  left: 10px;
+  top:0px;
+  background: rgb(192, 192, 192);
+  text-align: center;
+  padding: 10px;
+  display: flex;
+  transition: .6s ease-out;
+  border-radius: 5px;
+}
+
+
+.bm-burger-bars {
+  background: #000000;
+  height: 10px;
+  width: 70%;
+  margin: auto;
 }

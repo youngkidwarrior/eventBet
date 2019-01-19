@@ -1,146 +1,141 @@
 import React, { Component } from 'react';
-import {
-  AccountData,
-  ContractData,
-  ContractForm
-} from 'drizzle-react-components';
 import './Home.css';
-import { Link } from 'react-router-dom';
+import MainNavigation from '../../components/navigation/MainNavigation';
 
 class Home extends Component {
   constructor(props) {
     super(props);
+    this.homeImage = React.createRef();
     this.state = {
-      ipfsHash: '',
-      ethAddress: '',
-      loading: false,
-      User: {
-        username: '',
-        title: '',
-        description: '',
-        address: ''
-      }
+      scrollTop: 0,
+      menuToggle: true,
+      isScroll: true,
+      isStuck: false
     };
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
     this.setState({
-      // ethAddress: this.props.UserHash,
-      loading: true,
-      User: {
-        username: this.username.value,
-        title: this.title.value,
-        description: this.description.value,
-        address: this.props.accounts[0]
-      }
+      scrollTop: this.homeImage.current.scrollTop
     });
+    if (this.isBottom(this.homeImage.current)) {
+      this.setState({
+        isScroll: false,
+        isStuck: true
+      });
+    }
   }
 
-  // add(buffer) {
-  //   ipfs.add(buffer).then(result => {
-  //     this.setState({ ipfsHash: result[0].hash, loading: false }, () =>
-  //       ipfs.get(this.state.ipfsHash)
-  //       // this.publish(this.state.ipfsHash)
-  //     );
-  //   });
-  // }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
 
-  // publish(hash) {
-  //   console.log(JSON.stringify(hash))
-  //   ipfs.name.publish(hash).then(res => {
-  //     console.log(res.text());
-  //   });
-  // }
+  handleArrowClick = e => {
+    e.preventDefault();
+    // if()
+    const imageBottom =
+      this.homeImage.current.offsetTop +
+      this.homeImage.current.offsetHeight -
+      200;
+    console.log(this.homeImage.current.offsetHeight);
+    window.scrollTo({ left: 0, top: imageBottom, behavior: 'smooth' });
+  };
 
-  // createUser() {
-  //   var title = $('#sign - up - title').val();
-  //   var intro = $('#sign - up - intro').val();
-  //   // var ipfsHash = '';
-  //   var ipfsHash = 'not-available';
-  //   console.log('creating user on eth for', username, title, intro, ipfsHash);
-  //   User.deployed().then(function (contractInstance) {
-  //     contractInstance.createUser(username, ipfsHash, { gas: 200000, from: web3.eth.accounts[0] }).then(function (success) {
-  //       if (success) {
-  //         console.log('created user on ethereum!');
-  //       } else {
-  //         console.log('error creating user on ethereum');
-  //       }
-  //     }).catch(function (e) {
-  //       // There was an error! Handle it.
-  //       console.log('error creating user: ', username, ': ', e);
-  //     });
-  //   });
-  // }
+  handleScroll = () => {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    this.setState({
+      isScroll: true
+    });
+    if (this.state.scrollTop <= st) {
+      this.setState({
+        scrollTop: st,
+        menuToggle: false
+      });
+    } else {
+      this.setState({
+        scrollTop: st,
+        menuToggle: true
+      });
+    }
+    if (this.isBottom(this.homeImage.current)) {
+      this.setState({
+        isScroll: false,
+        isStuck: true
+      });
+    } else {
+      this.setState({
+        isScroll: true,
+        isStuck: false
+      });
+    }
+  };
+
+  isBottom = el => {
+    return el.getBoundingClientRect().bottom <= window.innerHeight;
+  };
+
   render() {
     return (
       <div>
-        <nav>
-          <div className="nav-list">
-            <Link to="/">Profiles</Link>
-
-            <ul>
-              <li>
-                <Link to="/">Home></Link>
-              </li>
-              <li>
-                <Link to="/tutorial">Tutorial</Link>
-              </li>
-            </ul>
+        <MainNavigation menuToggle={this.state.menuToggle} />
+        <div className="home-landing-container">
+          <div
+            className={
+              'home-title-container ' +
+              (this.state.scrollTop <= 100 ? '' : 'title-offset')
+            }
+          >
+            <h1>Welcome</h1>
           </div>
-        </nav>
-
-        <div className="container">
-          {!this.state.loading ? (
-            <form>
-              <h5> Create your Profile</h5>
-              <div>
-                <label htmlFor="username">Username</label>
-                <input
-                  type="text"
-                  className="signup-username"
-                  ref={el => (this.username = el)}
-                />
-              </div>
-              <br />
-
-              <div>
-                <label htmlFor="username">Title</label>
-                <input
-                  type="text"
-                  className="signup-title"
-                  ref={el => (this.title = el)}
-                />
-              </div>
-              <br />
-              <div>
-                <label htmlFor="username">Short description</label>
-                <textarea
-                  rows="2"
-                  className="signup-description"
-                  ref={el => (this.description = el)}
-                />
-              </div>
-              <br />
-              <div>
-                ETH Address:
-                <span className="eth-address" />
-                <AccountData accountIndex="0" units="ether" precision="3" />
-              </div>
-              <button
-                type="submit"
-                className="signup-submit"
-                onClick={this.handleSubmit.bind(this)}
-              >
-                Sign Up
-              </button>
-            </form>
-          ) : (
-            <div>loading</div>
-          )}
-          <ContractForm contract="UserHash" method="setHash" />
+          <div className="home-image-container" ref={this.homeImage}>
+            <img
+              className="home-image"
+              src="https://images.wallpaperscraft.com/image/glare_background_blur_dark_63553_1920x1080.jpg"
+              alt="Home"
+            />
+          </div>
+          <div
+            className={
+              'home-image-footer' + (this.state.isStuck ? ' stuck ' : '')
+            }
+          >
+            <img
+              className={
+                'guide-arrow' + (this.state.isScroll ? ' scrolled' : '')
+              }
+              src="http://clipart-library.com/images/ziX5yr5kT.png"
+              alt="arrow"
+              onClick={this.handleArrowClick}
+            />
+          </div>
+          <div className="fader-container">
+            <img
+              className="fader"
+              src="https://css-tricks.com/examples/FadeOutBottom/bottom-fade.png"
+              alt="fade"
+            />
+          </div>
         </div>
-        <div className="users" />
+        <div className="home-content-container">
+          <div className="home-content-header" />
+          <div className="home-content">
+            <div className="cards">
+              <h1>H</h1>
+              <h1>E</h1>
+              <h1>L</h1>
+              <h1>L</h1>
+              <h1>O</h1>
+              <h1>W</h1>
+              <h1>O</h1>
+              <h1>R</h1>
+              <h1>L</h1>
+              <h1>D</h1>
+            </div>
+          </div>
+          <div className="home-content-options" />
+        </div>
+        <div className="home-footer" />
       </div>
     );
   }

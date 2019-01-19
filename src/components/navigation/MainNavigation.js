@@ -2,11 +2,16 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './MainNavigation.css';
 import { drizzleConnect } from 'drizzle-react';
+import { slide as Menu } from 'react-burger-menu';
 
 const mainNavigation = props => (
-  <header className="main-navigation">
+  <Menu
+    className='main-navigation'
+    burgerButtonClassName={!props.menuToggle ? 'hide-menu' : ''}
+  >
+  {console.log(props.menuToggle)}
     <div className="main-navigation__logo">
-      <NavLink to="/tutorial">
+      <NavLink to="/">
         <h1>The Navbar</h1>
       </NavLink>
     </div>
@@ -28,12 +33,12 @@ const mainNavigation = props => (
       </ul>
     </nav>
     {props.token && (
-        <div className="user-info">
-          <h3 className="username-header">{props.username}</h3>
-          <h3 className="email-header">{props.email}</h3>
-        </div>
-      )}
-  </header>
+      <div className="user-info">
+        <h3 className="username-header">{props.username}</h3>
+        <h3 className="email-header">{props.email}</h3>
+      </div>
+    )}
+  </Menu>
 );
 
 const mapStateToProps = (state, props) => {

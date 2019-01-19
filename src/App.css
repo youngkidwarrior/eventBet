@@ -1,5 +1,7 @@
 /* LOADING SCREEN */
-
+.App{
+  scroll-behavior: smooth;
+}
 .loading-screen {
   opacity: 1;
   visibility: visible;
