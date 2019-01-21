@@ -48,6 +48,28 @@ const authReducer = (
         loading: false,
         error: action.payload.err
       };
+    case 'LOGOUT_BEGIN':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case 'LOGOUT_SUCCESS':
+      return {
+        ...state,
+        userId: action.payload.userId,
+        token: action.payload.token,
+        tokenExpiration: action.payload.tokenExpiration,
+        username: action.payload.username,
+        email: action.payload.email,
+        loading: false
+      };
+    case 'LOGOUT_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.err
+      };
 
     default:
       return state;

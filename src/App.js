@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import HomeContainer from './layouts/home/HomeContainer';
 import TutorialContainer from './layouts/tutorial/TutorialContainer';
-import MainNavigation from './components/navigation/MainNavigation'
 
 // Styles
 import './css/oswald.css';

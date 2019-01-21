@@ -4,6 +4,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { authorize } from '../../../actions/tokenAuth';
 import { userInfo } from '../../../actions/userInfo';
 
+
 const mapStateToProps = (state, props) => {
   return {
     accounts: state.accounts,

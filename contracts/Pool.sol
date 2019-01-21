@@ -17,7 +17,7 @@ contract Pool is Ownable {
       uint16 betType;
     }
 
-     mapping(address => Player) betLog;
+    mapping(address => Player)[] teams;
 
 
     function() external payable {}

@@ -9,7 +9,7 @@ export const authorize = (userId, token, tokenExpiration) => dispatch => {
 
 export const AUTHORIZE_BEGIN = 'AUTHORIZE_BEGIN';
 export const AUTHORIZE_SUCCESS = 'AUTHORIZE_SUCCESS';
-export const AUTHORIZE_FAILURE = 'AUTHORIZE FAILURE';
+export const AUTHORIZE_FAILURE = 'AUTHORIZE_FAILURE';
 
 export const authorizeBegin = () => ({
   type: AUTHORIZE_BEGIN,

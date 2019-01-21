@@ -6,9 +6,10 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.homeImage = React.createRef();
+    this.homeTitle = React.createRef();
     this.state = {
       scrollTop: 0,
-      menuToggle: true,
+      menuToggle: false,
       isScroll: true,
       isStuck: false
     };
@@ -50,12 +51,12 @@ class Home extends Component {
     if (this.state.scrollTop <= st) {
       this.setState({
         scrollTop: st,
-        menuToggle: false
+        menuToggle: true
       });
     } else {
       this.setState({
         scrollTop: st,
-        menuToggle: true
+        menuToggle: false
       });
     }
     if (this.isBottom(this.homeImage.current)) {
@@ -71,6 +72,8 @@ class Home extends Component {
     }
   };
 
+  
+
   isBottom = el => {
     return el.getBoundingClientRect().bottom <= window.innerHeight;
   };
@@ -85,6 +88,7 @@ class Home extends Component {
               'home-title-container ' +
               (this.state.scrollTop <= 100 ? '' : 'title-offset')
             }
+            ref={this.homeTitle}
           >
             <h1>Welcome</h1>
           </div>

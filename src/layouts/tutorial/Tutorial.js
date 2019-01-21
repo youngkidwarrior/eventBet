@@ -22,9 +22,6 @@ class Tutorial extends Component {
         <MainNavigation />
         <div className="main-content">
           <Switch>
-            {!this.props.token && (
-              <Redirect from="/tutorial" to="/tutorial/auth" exact />
-            )}
             {this.props.token && (
               <Redirect from="/tutorial" to="/tutorial/events" exact />
             )}
@@ -38,6 +35,7 @@ class Tutorial extends Component {
             {this.props.token && (
               <Route path="/tutorial/bookings" component={BookingsContainer} />
             )}
+            {!this.props.token && <Redirect to="/tutorial/auth" exact />}
           </Switch>
         </div>
       </div>

@@ -3,18 +3,25 @@ import { NavLink } from 'react-router-dom';
 import './MainNavigation.css';
 import { drizzleConnect } from 'drizzle-react';
 import { slide as Menu } from 'react-burger-menu';
+import { logout } from '../../actions/logout';
 
 const mainNavigation = props => (
   <Menu
-    className='main-navigation'
-    burgerButtonClassName={!props.menuToggle ? 'hide-menu' : ''}
+    className="main-navigation"
+    burgerButtonClassName={props.menuToggle ? 'hide-menu' : ''}
+    customBurgerIcon={
+      <img
+        alt="burger_icon"
+        src="https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png"
+      />
+    }
   >
-  {console.log(props.menuToggle)}
     <div className="main-navigation__logo">
       <NavLink to="/">
         <h1>The Navbar</h1>
       </NavLink>
     </div>
+    <hr className="main-navigation__spacer"></hr>
     <nav className="main-navigation__items">
       <ul>
         {!props.token && (
@@ -26,9 +33,16 @@ const mainNavigation = props => (
           <NavLink to="/tutorial/events">Events</NavLink>
         </li>
         {props.token && (
-          <li>
-            <NavLink to="/tutorial/bookings">Bookings</NavLink>
-          </li>
+          <React.Fragment>
+            <li>
+              <NavLink to="/tutorial/bookings">Bookings</NavLink>
+            </li>
+            <li>
+              <button type="button" onClick={props.logout}>
+                Logout
+              </button>
+            </li>
+          </React.Fragment>
         )}
       </ul>
     </nav>
@@ -40,6 +54,10 @@ const mainNavigation = props => (
     )}
   </Menu>
 );
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(logout())
+});
 
 const mapStateToProps = (state, props) => {
   return {
@@ -53,4 +71,8 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default drizzleConnect(mainNavigation, mapStateToProps);
+export default drizzleConnect(
+  mainNavigation,
+  mapStateToProps,
+  mapDispatchToProps
+);

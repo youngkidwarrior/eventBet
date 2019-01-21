@@ -2,7 +2,6 @@ import Tutorial from './Tutorial'
 import { drizzleConnect } from 'drizzle-react'
 
 const mapStateToProps = (state, props) => {
-  console.log(state)
   return {
     accounts: state.accounts,
     SimpleStorage: state.contracts.SimpleStorage,
