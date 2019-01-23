@@ -2,9 +2,10 @@
   width: 90%;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  position: fixed;
   top: 20vh;
   left: 5%;
+  overflow: hidden;
+  transition: .3s ease-out;
 }
 
 .card__header {
@@ -24,11 +25,22 @@
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
+
 }
+
+.card_actions button {
+    margin-bottom: 1rem;
+}
+
+.collapsed {
+    max-height: 0px;
+}
+
 
 @media (min-width: 768px) {
   .card {
     width: 30rem;
     left: calc((100% - 30rem) / 2);
+
   }
 }
