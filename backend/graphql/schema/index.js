@@ -44,7 +44,7 @@ module.exports = buildSchema(`
             _id: ID!
             username: String!
             email: String!
-            address: String!
+            addresses: [String!]!
             nonce: String!
             createdEvents: [Event!]
         }

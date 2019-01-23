@@ -43,6 +43,7 @@ class Auth extends Component {
         return res.json();
       })
       .then(resData => {
+        console.log(resData);
         this.props.userInfo(
           resData.data.login.username,
           resData.data.login.email
@@ -129,7 +130,12 @@ class Auth extends Component {
         }
         return res.json();
       })
-      .then(this.login())
+      .then(resData => {
+        if (resData.errors) {
+          throw new Error('Address already in use')
+        }
+        this.login();
+      })
       .catch(err => {
         console.log(err);
       });

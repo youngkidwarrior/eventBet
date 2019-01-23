@@ -6,7 +6,7 @@ var ethUtil = require('ethereumjs-util');
 module.exports = {
   verify: async ({ address, signature }) => {
     try {
-      const user = await User.findOne({ address: address });
+      const user = await User.findOne({ addresses: address });
       const msg = `I am signing my one-time nonce: ${user.nonce}`;
       const msgBuffer = ethUtil.toBuffer(msg);
       const msgHash = ethUtil.hashPersonalMessage(msgBuffer);
@@ -31,8 +31,8 @@ module.exports = {
           'somesupersecretkey',
           { expiresIn: '1h' }
         );
-        user.nonce = await bcrypt.hash(user.nonce, 12)
-        const result = await user.save(); 
+        user.nonce = await bcrypt.hash(user.nonce, 12);
+        const result = await user.save();
         return {
           userId: result.id,
           nonce: result.nonce,
@@ -46,36 +46,55 @@ module.exports = {
   },
   //object destructuring arguments
   login: async ({ address }) => {
-    const user = await User.findOne({ address: address });
+    const user = await User.findOne({
+      addresses: address
+    });
     if (!user) {
       throw new Error('User does not exist');
     }
-    const isEqual = address === user.address;
+
+    const isEqual = user.addresses.includes(address);
     if (!isEqual) {
       throw new Error(`${address}: Address is not registered`);
     }
-    return {...user._doc, _id: user.id};
+    return { ...user._doc, _id: user.id };
   },
   createUser: async args => {
     try {
+      const existingAddress = await User.findOne({
+        addresses: args.userInput.address
+      });
+      if (existingAddress) {
+        console.log(existingAddress)
+        throw new Error('User already exists.');
+      }
       const existingUser = await User.findOne({
-        address: args.userInput.address
+        email: args.userInput.email
       });
       if (existingUser) {
-        throw new Error('User already exists.');
+        existingUser.addresses.push(args.userInput.address);
+        const result = await existingUser.save();
+        return {
+          ...result._doc,
+          username: result._doc.username,
+          addresses: result._doc.addresses,
+          nonce: result._doc.nonce,
+          _id: result.id
+        };
       }
       const nonce = await bcrypt.hash(args.userInput.address, 12);
       const user = new User({
         username: args.userInput.username,
         email: args.userInput.email,
-        address: args.userInput.address,
+        addresses: args.userInput.address,
         nonce: nonce
       });
       const result = await user.save();
+      console.log(user);
       return {
         ...result._doc,
         username: result._doc.username,
-        address: result._doc.address,
+        addresses: result._doc.addresses,
         nonce: result._doc.nonce,
         _id: result.id
       };
