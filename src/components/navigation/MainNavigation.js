@@ -5,7 +5,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { slide as Menu } from 'react-burger-menu';
 import { logout } from '../../actions/logout';
 
-const mainNavigation = props => (
+const MainNavigation = props => (
   <Menu
     className="main-navigation"
     burgerButtonClassName={props.menuToggle ? 'hide-menu' : ''}
@@ -18,7 +18,7 @@ const mainNavigation = props => (
   >
     <div className="main-navigation__logo">
       <NavLink to="/">
-        <h1>The Navbar</h1>
+        <h1>Home</h1>
       </NavLink>
     </div>
     <hr className="main-navigation__spacer"></hr>
@@ -72,7 +72,7 @@ const mapStateToProps = (state, props) => {
 };
 
 export default drizzleConnect(
-  mainNavigation,
+  MainNavigation,
   mapStateToProps,
   mapDispatchToProps
 );

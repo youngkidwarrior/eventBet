@@ -1,6 +1,7 @@
 import Events from './Events';
 import { drizzleConnect } from 'drizzle-react';
 import { fetchEvents } from '../../../actions/fetchEvents';
+import { addEvent } from '../../../actions/addEvent';
 
 const mapStateToProps = state => {
   console.log(state);
@@ -8,12 +9,15 @@ const mapStateToProps = state => {
     accounts: state.accounts,
     drizzleStatus: state.drizzleStatus,
     token: state.authorize.token,
-    eventList: state.eventLog.eventList
+    userId: state.authorize.userId,
+    eventList: state.eventLog.eventList,
+    isLoading: state.eventLog.loading
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  fetchEvents: () => dispatch(fetchEvents())
+  fetchEvents: () => dispatch(fetchEvents()),
+  addEvent: event => dispatch(addEvent(event))
 });
 
 const EventsContainer = drizzleConnect(

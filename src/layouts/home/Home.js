@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Home.css';
 import MainNavigation from '../../components/navigation/MainNavigation';
+import Parcel from '../../components/parcel/parcel'
 
 class Home extends Component {
   constructor(props) {
@@ -125,16 +126,9 @@ class Home extends Component {
           <div className="home-content-header" />
           <div className="home-content">
             <div className="cards">
-              <h1>H</h1>
-              <h1>E</h1>
-              <h1>L</h1>
-              <h1>L</h1>
-              <h1>O</h1>
-              <h1>W</h1>
-              <h1>O</h1>
-              <h1>R</h1>
-              <h1>L</h1>
-              <h1>D</h1>
+              <Parcel/>
+              <Parcel/>
+              <Parcel/>
             </div>
           </div>
           <div className="home-content-options" />

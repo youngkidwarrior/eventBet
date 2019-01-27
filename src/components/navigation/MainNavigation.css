@@ -9,11 +9,16 @@
   flex-direction: column;
 }
 
-.main-navigation::selection {
+.main-navigation::selection,
+.main-navigation__spacer::selection,
+.main-navigation__logo a::selection {
   background-color: Transparent;
   color: #000;
 }
-
+.main-navigation__logo {
+  margin-top: 1rem;
+  text-align: center;
+}
 .main-navigation__logo h1 {
   margin: 0;
   font-size: 1.5rem;
@@ -24,6 +29,7 @@
 }
 
 .main-navigation__spacer {
+  background: transparent;
     transition: 2s;
     width: 90%;
     border: 2px solid white;
@@ -42,7 +48,7 @@
 }
 
 .main-navigation__items li {
-  margin: 0 1rem;
+  margin: 0.5rem 1rem;
 }
 
 .main-navigation__items a,

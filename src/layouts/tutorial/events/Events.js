@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+
 import './Events.css';
 import Card from '../../../components/card/card';
+import Spinner from '../../../components/spinner/spinner';
+import EventList from '../../../components/events/eventlist/eventList';
 
 class Events extends Component {
   constructor(props) {
@@ -13,7 +16,8 @@ class Events extends Component {
     this.state = {
       cardHeight: null,
       creating: false,
-      collapsed: true
+      collapsed: true,
+      selectedEvent: null
     };
   }
 
@@ -22,8 +26,7 @@ class Events extends Component {
   }
 
   startCreateEventHandler = () => {
-    const cardContent = this.cardContainerEl.current.firstChild;
-
+    const cardContent = this.cardContainerEl.firstChild;
     this.setState({
       cardHeight: cardContent.scrollHeight + 'px',
       creating: true,
@@ -81,7 +84,15 @@ class Events extends Component {
         return res.json();
       })
       .then(resData => {
-        this.props.fetchEvents();
+        const event = {
+          _id: this.props.userId,
+          title: resData.data.createEvent.title,
+          description: resData.data.createEvent.description,
+          date: resData.data.createEvent.date,
+          price: resData.data.createEvent.price,
+          creator: { _id: this.props.userId }
+        };
+        this.props.addEvent(event);
       })
       .catch(err => {
         console.log(err);
@@ -89,17 +100,35 @@ class Events extends Component {
   };
 
   cardCancelHandler = () => {
-    this.setState({ cardHeight: null, creating: false, collapsed: true });
+    this.setState({
+      cardHeight: null,
+      creating: false,
+      collapsed: true,
+      selectedEvent: null
+    });
+  };
+
+  bookEventHandler = () => {};
+
+  showDetailHandler = eventId => {
+    const selectedEvent = this.props.eventList.find(e => e._id === eventId);
+
+    this.setState({ selectedEvent: selectedEvent }, () => {
+      this.setState(prevState => {
+        const cardContent = this.eventListEl.firstChild;
+        return {
+          cardHeight: cardContent.scrollHeight + 'px',
+          collapsed: false
+        };
+      });
+    });
+  };
+
+  setCardRef = ref => {
+    this.eventListEl = ref;
   };
 
   render() {
-    const eventList = this.props.eventList.map(event => {
-      return (
-        <li key={event._id} className="events__list-item">
-          {event.title}
-        </li>
-      );
-    });
     return (
       <React.Fragment>
         {this.props.token && (
@@ -117,6 +146,7 @@ class Events extends Component {
                 onConfirm={this.cardConfirmHandler}
                 scrollHeight={this.state.cardHeight}
                 collapsed={this.state.collapsed}
+                confirmText='Confirm'
               >
                 <form>
                   <div className="form-control">
@@ -144,7 +174,21 @@ class Events extends Component {
             </div>
           </div>
         )}
-        <ul className="events__list">{eventList}</ul>
+        {this.props.isLoading ? (
+          <Spinner />
+        ) : (
+          <EventList
+            events={this.props.eventList}
+            authUserId={this.props.userId}
+            onViewDetail={this.showDetailHandler}
+            cardCancelHandler={this.cardCancelHandler}
+            bookEventHandler={this.bookEventHandler}
+            setCardRef={this.setCardRef}
+            selectedCardHeight={this.state.cardHeight}
+            selectedCollapsed={this.state.collapsed}
+            selectedEvent={this.state.selectedEvent}
+          />
+        )}
       </React.Fragment>
     );
   }
