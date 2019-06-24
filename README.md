@@ -4,15 +4,20 @@ Event Bet is a test repo I created to practice proper React and Node techniques 
 
 ## Installation
 
-1. Clone
-2. Install packages with ```npm install``` 
-3. Start the nodemon server ```npm run start:server``` 
-4. Run the dApp ```npm start``` 
+1. ```git clone  https://github.com/youngkidwarrior/eventBet.git```
+2. Install packages with 
+  ```npm install``` 
+3. Start the nodemon server 
+  ```npm run start:server``` 
+4. Run the dApp 
+  ```npm start``` 
 
 **Note:
 Evetn Bet requires an Ethereum testnet in order to run.
 
 To run your own testnet,
 
-1. Install ganache-cli ```npm install -g ganache-cli```
-2. Run the CLI with ```ganache-cli``` command
+1. Install ganache-cli 
+  ```npm install -g ganache-cli```
+2. Run the CLI with 
+  ```ganache-cli```
