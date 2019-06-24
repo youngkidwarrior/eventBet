@@ -12,8 +12,8 @@ Event Bet is a test repo I created to practice proper React and Node techniques 
 4. Run the dApp 
   ```npm start``` 
 
-**Note:
-Evetn Bet requires an Ethereum testnet in order to run.
+#Note:
+Event Bet requires an Ethereum testnet in order to run.
 
 To run your own testnet,
 
