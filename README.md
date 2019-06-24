@@ -1,6 +1,6 @@
 # Event Bet
 
-Event Bet is a test repo I created to practice proper React and Node techniques for an Ethereum dApp. The idea is to provide users with a event scheduling system where they can vote on the time and date of the event. Users can also betmoney on the time and day of the event. Currently Event bet supports Metamask login and creating events.
+Event Bet is a test repo I created to practice proper React and Node techniques for an Ethereum dApp. The idea is to provide users with a event scheduling system where they can vote on the time and date of the event. Users can also bet Ethereum on the time and date of the event. Currently Event Bet supports Metamask login and creating events.
 
 ## Installation
 
